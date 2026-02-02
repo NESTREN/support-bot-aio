@@ -1,0 +1,65 @@
+УСТАНОВКА НА UBUNTU (ПОДРОБНО)
+
+1. Требования
+- Ubuntu 20.04 / 22.04
+- Python 3.10+
+- pip
+- доступ к интернету
+
+2. Установка Python
+sudo apt update
+sudo apt install python3 python3-pip -y
+
+3. Клонирование / загрузка
+Скопируйте файлы бота на сервер:
+/opt/support_bot/
+
+4. Установка зависимостей
+cd /opt/support_bot
+pip3 install -r requirements.txt
+
+5. Настройка
+Откройте config.py:
+BOT_TOKEN = "ТОКЕН_ОТ_BOTFATHER"
+ADMINS = [ВАШ_TELEGRAM_ID]
+
+6. Запуск
+python3 bot.py
+
+7. Запуск в фоне (systemd)
+Создайте сервис:
+sudo nano /etc/systemd/system/support_bot.service
+
+[Unit]
+Description=Telegram Support Bot
+After=network.target
+
+[Service]
+ExecStart=/usr/bin/python3 /opt/support_bot/bot.py
+WorkingDirectory=/opt/support_bot
+Restart=always
+
+[Install]
+WantedBy=multi-user.target
+
+Далее:
+sudo systemctl daemon-reload
+sudo systemctl enable support_bot
+sudo systemctl start support_bot
+
+8. Что использует бот
+- aiogram 3 (Telegram API)
+- FSM (Finite State Machine)
+- SQLite (хранение данных)
+- InlineKeyboard / ReplyKeyboard
+- async / await
+
+9. Безопасность
+- токен хранить в config.py или env
+- доступ к серверу ограничить
+- при необходимости добавить роли админов
+
+10. Масштабирование
+- можно заменить SQLite на PostgreSQL
+- можно добавить web-панель
+- можно вынести медиа-хранилище
